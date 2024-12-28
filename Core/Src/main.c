@@ -119,12 +119,20 @@ void SystemClock_Config(void)
   {
   }
 
-  /* Set AHB prescaler*/
-  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+  /* Main PLL configuration and activation */
+  LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI, LL_RCC_PLLM_DIV_1, 8, LL_RCC_PLLR_DIV_2);
+  LL_RCC_PLL_Enable();
+  LL_RCC_PLL_EnableDomain_SYS();
+  while(LL_RCC_PLL_IsReady() != 1)
+  {
+  }
 
-  /* Sysclk activation on the HSI */
-  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
-  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
+  /* Set AHB prescaler*/
+  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_4);
+
+  /* Sysclk activation on the main PLL */
+  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
+  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL)
   {
   }
 
