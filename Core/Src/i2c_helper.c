@@ -1,4 +1,9 @@
 #include "i2c_helper.h"
+#include "stm32g0xx_ll_dma.h"
+#include "main.h"
+
+uint8_t i2cDmaTxBuff1[DMA_TX_BUFF_LEN_BYTES];
+uint8_t i2cDmaRxBuff1[DMA_RX_BUFF_LEN_BYTES];
 
 /* Start I2C function.
  * @param I2Cx 	   Selected I2C
@@ -16,7 +21,7 @@ void I2C_Start (I2C_TypeDef *I2Cx)
  */
 void I2C_Stop (I2C_TypeDef *I2Cx)
 {
-	LL_I2C_GenerateStopCondition(I2Cx);  // Stop I2C
+//	LL_I2C_GenerateStopCondition(I2Cx);  // Stop I2C
 }
 
 /* Only write byte I2C function.
@@ -114,17 +119,52 @@ void I2C_Read (I2C_TypeDef *I2Cx, uint8_t Address, uint8_t *buffer, uint8_t size
  */
 void I2C_WriteData(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t Reg, uint8_t Data)
 {
-//	I2C_Start (I2Cx);
+
+//	LL_I2C_Disable(I2C1);
+//	LL_I2C_DisableAutoEndMode(I2C1);
+//	LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 2);
+////	LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&i2cDmaTxBuff1);
+////	LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&I2C1->TXDR);
+//	i2cDmaTxBuff1[0] = Reg;
+//	i2cDmaTxBuff1[1] = Data;
+//	LL_DMA_ConfigAddresses(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&i2cDmaTxBuff1, LL_I2C_DMA_GetRegAddr(I2C1, LL_I2C_DMA_REG_DATA_TRANSMIT), LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_1));
+//
+//	LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_1);
 //	I2C_Address (I2Cx, Address);
+//	isPrevTransferFinished = 0;
+//	LL_I2C_Enable(I2C1);
+//	I2C_Start (I2Cx);
+//	i2cDmaTxBuff1[0] = Reg;
+//	i2cDmaTxBuff1[1] = Data;
+//	while(LL_I2C_IsActiveFlag_TC(I2Cx) == 0){
+////		wait for dev addr to transfer
+//	}
+//	LL_mDelay(1);
+//	LL_I2C_EnableDMAReq_TX(I2C1);
+//	LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+
+
+	LL_I2C_EnableIT_NACK(I2C1);
+	LL_I2C_EnableIT_STOP(I2C1);
+	LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_1);
+	LL_DMA_ConfigAddresses(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&i2cDmaTxBuff1, LL_I2C_DMA_GetRegAddr(I2C1, LL_I2C_DMA_REG_DATA_TRANSMIT), LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_1));
+	LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
+	LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 3);
+	i2cDmaTxBuff1[0] = Reg;
+	i2cDmaTxBuff1[1] = Data;
+	isPrevTransferFinished = 0;
+	LL_I2C_EnableDMAReq_TX(I2C1);
+	LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+	LL_I2C_HandleTransfer(I2C1, Address, LL_I2C_ADDRSLAVE_7BIT, 3, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
+
+
+	LL_I2C_EnableDMAReq_TX(I2C1);
+	LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+
+
 //	I2C_Write (I2Cx, Reg);
 //	I2C_Write (I2Cx, Data);
 //	I2C_Stop (I2Cx);
-
-	I2C_Address (I2Cx, Address);
-	I2C_Start (I2Cx);
-	I2C_Write (I2Cx, Reg);
-	I2C_Write (I2Cx, Data);
-	I2C_Stop (I2Cx);
 }
 
 /** Multy Write 8-bit to device register.

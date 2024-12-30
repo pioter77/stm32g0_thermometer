@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "i2c.h"
 #include "gpio.h"
 
@@ -91,6 +92,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   ssd1306_Init(I2C1);
@@ -102,9 +104,10 @@ int main(void)
   {
 	  //LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
 //	  LL_mDelay(150);
-	  ssd1306_Fill(White);
-	  ssd1306_UpdateScreen(I2C1);
-	  LL_mDelay(2000);
+
+//	  ssd1306_Fill(White);
+//	  ssd1306_UpdateScreen(I2C1);
+	  //LL_mDelay(2000);
 
     /* USER CODE END WHILE */
 

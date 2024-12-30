@@ -22,6 +22,8 @@
 #include "stm32g0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "i2c_helper.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -198,6 +200,47 @@ void EXTI4_15_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
   /* USER CODE END EXTI4_15_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 channel 1 interrupt.
+  */
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+	if(LL_DMA_IsActiveFlag_TC1(DMA1))
+	{
+		LL_DMA_ClearFlag_TC1(DMA1);
+		LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
+		isPrevTransferFinished = 1;
+		//LL_I2C_GenerateStopCondition(I2C1);  // Stop I2C
+
+	}
+
+	if(LL_DMA_IsActiveFlag_TE1(DMA1))
+	{
+		LL_DMA_ClearFlag_TE1(DMA1);
+		LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
+		isPrevTransferFinished = 1;
+		//error need to recover the communication
+	}
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 channel 4, channel 5 and DMAMUX1 interrupts.
+  */
+void DMA1_Ch4_5_DMAMUX1_OVR_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Ch4_5_DMAMUX1_OVR_IRQn 0 */
+
+  /* USER CODE END DMA1_Ch4_5_DMAMUX1_OVR_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Ch4_5_DMAMUX1_OVR_IRQn 1 */
+
+  /* USER CODE END DMA1_Ch4_5_DMAMUX1_OVR_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

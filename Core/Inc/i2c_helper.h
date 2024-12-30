@@ -7,6 +7,13 @@
 #define I2C_REQUEST_WRITE   0x00
 #define I2C_REQUEST_READ    0x01
 
+#define DMA_TX_BUFF_LEN_BYTES 384
+#define DMA_RX_BUFF_LEN_BYTES 384
+
+extern _Bool isPrevTransferFinished;		//for non blocking i2c transfers
+extern uint8_t i2cDmaTxBuff1[DMA_TX_BUFF_LEN_BYTES];
+extern uint8_t i2cDmaRxBuff1[DMA_RX_BUFF_LEN_BYTES];
+
 void I2C_WriteData(I2C_TypeDef *I2Cx,uint8_t Address, uint8_t Reg, uint8_t Data);
 void I2C_ReadData(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t Reg, uint8_t *buffer, uint8_t size);
 void I2C_MultWriteData(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t Reg, uint8_t *Data, uint16_t size);

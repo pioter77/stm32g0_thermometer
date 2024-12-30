@@ -8,11 +8,16 @@ static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 // Screen object
 static SSD1306_t SSD1306;
 
+_Bool isPrevTransferFinished;
+
 //
 //  Send a byte to the command register
 //
 static void ssd1306_WriteCommand(I2C_TypeDef *I2Cx, uint8_t command)
 {
+	while(!isPrevTransferFinished){
+		//wait for prev transfer to stop
+	}
 	I2C_WriteData(I2Cx, SSD1306_I2C_ADDR, 0x00, command);
 }
 //
@@ -20,6 +25,8 @@ static void ssd1306_WriteCommand(I2C_TypeDef *I2Cx, uint8_t command)
 //
 uint8_t ssd1306_Init(I2C_TypeDef *I2Cx)
 {	
+
+	isPrevTransferFinished = 1;
 	// Wait for the screen to boot
 	LL_mDelay(100);
 	

@@ -5,11 +5,13 @@
 #include "stm32g0xx_ll_utils.h"
 
 // I2c address
-#define SSD1306_I2C_ADDR        0x78  ///0x3c 0x3d //for 0.42 module 0x78 or 0x7A
+#define SSD1306_I2C_ADDR        0x78  //0x78 fir 0.42 i2c oled
 // SSD1306 width in pixels
 #define SSD1306_WIDTH           72
 // SSD1306 LCD height in pixels
 #define SSD1306_HEIGHT          40
+
+
 
 //
 //  Enumeration for screen colors
