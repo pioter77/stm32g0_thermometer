@@ -15,6 +15,7 @@ _Bool isPrevTransferFinished;
 //
 static void ssd1306_WriteCommand(I2C_TypeDef *I2Cx, uint8_t command)
 {
+
 	while(!isPrevTransferFinished){
 		//wait for prev transfer to stop
 	}
@@ -63,7 +64,7 @@ uint8_t ssd1306_Init(I2C_TypeDef *I2Cx)
 	ssd1306_WriteCommand(I2Cx, 0xAF); //--turn on SSD1306 panel
 
 	// Clear screen
-	ssd1306_Fill(Black);
+	ssd1306_Fill(White);
 
 	// Flush buffer to screen
 	ssd1306_UpdateScreen(I2Cx);
@@ -102,8 +103,16 @@ void ssd1306_UpdateScreen(I2C_TypeDef *I2Cx)
 		ssd1306_WriteCommand(I2Cx, 0xB0 + i);
 		ssd1306_WriteCommand(I2Cx, 0x00);
 		ssd1306_WriteCommand(I2Cx, 0x10);
+
+//		ssd1306_WriteCommand(I2Cx, 0x0C);
+//		ssd1306_WriteCommand(I2Cx, 0x11);
 		I2C_MultWriteData(I2Cx, SSD1306_I2C_ADDR, 0x40, &SSD1306_Buffer[SSD1306_WIDTH * i], SSD1306_WIDTH);
 	}
+
+//	ssd1306_WriteCommand(I2Cx, 0xB0);
+//	ssd1306_WriteCommand(I2Cx, 0x00);
+//	ssd1306_WriteCommand(I2Cx, 0x10);
+//	I2C_MultWriteData(I2Cx, SSD1306_I2C_ADDR, 0x40, SSD1306_Buffer, SSD1306_WIDTH * SSD1306_HEIGHT / 8);
 }
 
 //

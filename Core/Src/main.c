@@ -96,18 +96,21 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   ssd1306_Init(I2C1);
+  //SSD1306_ON(I2C1);
+  LL_mDelay(100);
+  //SSD1306_Clear (I2C1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
-//	  LL_mDelay(150);
+	  LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
+	  LL_mDelay(150);
 
-//	  ssd1306_Fill(White);
-//	  ssd1306_UpdateScreen(I2C1);
-	  //LL_mDelay(2000);
+	  ssd1306_Fill(White);
+	  ssd1306_UpdateScreen(I2C1);
+	  LL_mDelay(2000);
 
     /* USER CODE END WHILE */
 
