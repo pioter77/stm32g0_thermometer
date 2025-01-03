@@ -22,5 +22,11 @@ extern FontDef_t Font_7x10;
 extern FontDef_t Font_11x18;
 extern FontDef_t Font_16x26;
 
+//extern const uint16_t Font7x10[];
+//extern const uint16_t Font11x18[];
+//extern const uint16_t Font16x26[];
+
+
+
 //for calculating string len an height in pixels based on string length and its font
 char* FONTS_GetStringSize(char* str, FONTS_SIZE_t* SizeStruct, FontDef_t* Font);

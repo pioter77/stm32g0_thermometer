@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ssd1306.h"
+#include "fonts.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,6 +99,7 @@ int main(void)
   ssd1306_Init(I2C1);
   //SSD1306_ON(I2C1);
   LL_mDelay(100);
+
   //SSD1306_Clear (I2C1);
   /* USER CODE END 2 */
 
@@ -105,10 +107,18 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
-	  LL_mDelay(150);
 
-	  ssd1306_Fill(White);
+	  LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
+
+//	  ssd1306_Fill(White);
+//	  ssd1306_SetCursor(28, 12+8);
+//	  SSD1306_DrawLine(56, 15, 60, 15, White);
+//	  SSD1306_DrawFilledRectangle(28, 24, 10, 10, White);
+//	  char buf1[] = "Dupa1!";
+	  SSD1306_DrawCircle(28+72/2, 14+20+10, 10, White);
+//	  ssd1306_DrawText(buf1, (const uint8_t *)(Font_7x10.data), 28, 44, White);
+//	  ssd1306_DrawChar('D', Font7x10, 28, 40, White);
+
 	  ssd1306_UpdateScreen(I2C1);
 	  LL_mDelay(2000);
 

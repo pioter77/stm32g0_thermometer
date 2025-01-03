@@ -7,8 +7,8 @@
 #define I2C_REQUEST_WRITE   0x00
 #define I2C_REQUEST_READ    0x01
 
-#define DMA_TX_BUFF_LEN_BYTES 384
-#define DMA_RX_BUFF_LEN_BYTES 384
+#define DMA_TX_BUFF_LEN_BYTES 130
+#define DMA_RX_BUFF_LEN_BYTES 64
 
 extern _Bool isPrevTransferFinished;		//for non blocking i2c transfers
 extern uint8_t i2cDmaTxBuff1[DMA_TX_BUFF_LEN_BYTES];

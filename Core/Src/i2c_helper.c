@@ -168,13 +168,13 @@ void I2C_WriteData(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t Reg, uint8_t Data
 	LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_1);
 	LL_DMA_ConfigAddresses(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&i2cDmaTxBuff1, LL_I2C_DMA_GetRegAddr(I2C1, LL_I2C_DMA_REG_DATA_TRANSMIT), LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_1));
 	LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
-	LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 3);
+	LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 2);
 	i2cDmaTxBuff1[0] = Reg;
 	i2cDmaTxBuff1[1] = Data;
 	isPrevTransferFinished = 0;
 	LL_I2C_EnableDMAReq_TX(I2C1);
 	LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
-	LL_I2C_HandleTransfer(I2C1, Address, LL_I2C_ADDRSLAVE_7BIT, 3, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
+	LL_I2C_HandleTransfer(I2C1, Address, LL_I2C_ADDRSLAVE_7BIT, 2, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
 
 
 	LL_I2C_EnableDMAReq_TX(I2C1);
