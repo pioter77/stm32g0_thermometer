@@ -375,16 +375,27 @@ void ssd1306_DrawText(const char* str, const uint8_t font[], uint8_t X, uint8_t 
     while (*str) {
         ssd1306_DrawChar(*str, font,  X, Y,  color);
         /* Check character width and calculate proper position */
-        uint8_t* tempChar = (uint8_t*)&font[((*str - 0x20) * fOffset) + 4];
-        charWidth = tempChar[0];
+        //add 4 as we have 4 positions wasted for font settings that are not pixels
+        //uint8_t* tempChar = (uint8_t*)&font[((*str - 0x20) * fOffset) + 4];
+        //check if the last byte of this char is empty then only 1px of margin
 
-        if (charWidth + 2 < fWidth) {
-            /* If character width is smaller than font width */
-            X += (charWidth + 2);
-        }
-        else {
-            X += fWidth;
-        }
+        //should be som proper way of calculating width implemented here instead of this rubbish
+//        if (*(tempChar+fWidth-1)){//it has pixel in its last row
+//        	charWidth = font[1];
+//        }else{//its 1 pixel column shorter than standard
+//        	charWidth = font[1]-1;
+//        }
+        charWidth = fWidth;
+        X += (charWidth + 1);
+
+//        if (charWidth + 2 < fWidth) {
+//            /* If character width is smaller than font width */
+//            X += (charWidth + 2);
+//        }
+//        else {
+//            X += fWidth+2;
+//        }
+//        X += fWidth;
         str++;
     }
 }

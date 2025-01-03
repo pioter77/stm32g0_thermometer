@@ -114,10 +114,17 @@ int main(void)
 //	  ssd1306_SetCursor(28, 12+8);
 //	  SSD1306_DrawLine(56, 15, 60, 15, White);
 //	  SSD1306_DrawFilledRectangle(28, 24, 10, 10, White);
-//	  char buf1[] = "Dupa1!";
-	  SSD1306_DrawCircle(28+72/2, 14+20+10, 10, White);
-//	  ssd1306_DrawText(buf1, (const uint8_t *)(Font_7x10.data), 28, 44, White);
-//	  ssd1306_DrawChar('D', Font_7x10, 28, 40, White);
+	  const char buf1[] = "Dupa1!:";
+//	  SSD1306_DrawCircle(28+72/2, 14+20+10, 10, White);
+//	  ssd1306_DrawText(buf1, (const uint8_t *)(Font_6x8.data), 28, 44, White);
+	  ssd1306_DrawText(buf1, Font6x8, 28, 44, White);
+	  for(uint8_t i=0; i<5; i++)
+	  {
+//		  ssd1306_DrawText(buf1, Font6x8, 28, 16+8+(10*i), White);
+		  ssd1306_DrawText(buf1, Font6x8, 28, 16+8+(8*i), White);
+	  }
+//	  ssd1306_DrawPixel(28, 44, White);
+//	  ssd1306_DrawChar('D', Font6x8, 28, 40, White);
 
 	  ssd1306_UpdateScreen(I2C1);
 	  LL_mDelay(2000);

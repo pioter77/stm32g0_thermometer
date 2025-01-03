@@ -27,7 +27,8 @@ typedef struct {
 
 
 #ifdef FONT_6_X_8
-	extern FontDef_t Font_6x8;
+	extern const uint8_t Font6x8 [];
+	//extern FontDef_t Font_6x8;
 #endif
 
 #ifdef FONT_7_X_9
