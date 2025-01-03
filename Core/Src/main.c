@@ -117,7 +117,7 @@ int main(void)
 //	  char buf1[] = "Dupa1!";
 	  SSD1306_DrawCircle(28+72/2, 14+20+10, 10, White);
 //	  ssd1306_DrawText(buf1, (const uint8_t *)(Font_7x10.data), 28, 44, White);
-//	  ssd1306_DrawChar('D', Font7x10, 28, 40, White);
+//	  ssd1306_DrawChar('D', Font_7x10, 28, 40, White);
 
 	  ssd1306_UpdateScreen(I2C1);
 	  LL_mDelay(2000);
