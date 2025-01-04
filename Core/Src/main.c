@@ -107,25 +107,48 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+	  //1st pixel for oled is at 28,24 position
 	  LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
 
 //	  ssd1306_Fill(White);
 //	  ssd1306_SetCursor(28, 12+8);
 //	  SSD1306_DrawLine(56, 15, 60, 15, White);
 //	  SSD1306_DrawFilledRectangle(28, 24, 10, 10, White);
-	  const char buf1[] = "Dupa1!:";
+	  const char buf1[] = "I:+24.5*C";
+	  const char buf2[] = "O:-12.9*C";
+	  const char buf3[] = "Temps";
 //	  SSD1306_DrawCircle(28+72/2, 14+20+10, 10, White);
-//	  ssd1306_DrawText(buf1, (const uint8_t *)(Font_6x8.data), 28, 44, White);
-	  ssd1306_DrawText(buf1, Font6x8, 28, 44, White);
+
+//	  ssd1306_DrawText(buf1, Font6x8, 28, 44, White);
 	  for(uint8_t i=0; i<5; i++)
 	  {
 //		  ssd1306_DrawText(buf1, Font6x8, 28, 16+8+(10*i), White);
-		  ssd1306_DrawText(buf1, Font6x8, 28, 16+8+(8*i), White);
+		//  ssd1306_DrawText(buf1, Font6x8, 28, 16+8+(8*i), White);
 	  }
-//	  ssd1306_DrawPixel(28, 44, White);
-//	  ssd1306_DrawChar('D', Font6x8, 28, 40, White);
+//	  ssd1306_DrawPixel(28, 24, White);
+//	  SSD1306_DrawLine(28, 24, 28, 43, White);
+//	  SSD1306_DrawLine(30, 44, 30, 63, White);
 
+//	  ssd1306_DrawChar('D', Font6x8, 28, 40, White);
+#define LAYOUT_2
+#ifdef LAYOUT_1
+	  //1st layout example:
+	  ssd1306_DrawText(buf1, Font7x13, 28, 24, White);
+	  ssd1306_DrawText(buf2, Font7x13, 28, 38, White);
+	  ssd1306_DrawText(buf3, Font6x8, 45, 52, White);
+	  SSD1306_DrawFilledRectangle(58, 61, 8, 3, White);
+	  SSD1306_DrawLine(30, 62, 96, 62, White);
+#endif
+
+#ifdef LAYOUT_2
+	  ssd1306_DrawText(buf3, Font6x8, 45, 24, White);
+	  SSD1306_DrawFilledRectangle(58, 35, 8, 3, White);
+	  SSD1306_DrawLine(30, 36, 96, 36, White);
+	  ssd1306_DrawText(buf1, Font7x13, 28, 41, White);
+	  ssd1306_DrawText(buf2, Font7x13, 28, 54, White);
+
+
+#endif
 	  ssd1306_UpdateScreen(I2C1);
 	  LL_mDelay(2000);
 

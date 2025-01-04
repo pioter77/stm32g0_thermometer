@@ -242,8 +242,8 @@ void ssd1306_UpdateScreen(I2C_TypeDef *I2Cx)
 //		ssd1306_WriteCommand(I2Cx, 0x04);
 //		ssd1306_WriteCommand(I2Cx, 0x0C);
 //		ssd1306_WriteCommand(I2Cx, 0x11);
-		uint8_t xOffset = (128-72)/2;
-		uint8_t yOffset = (64-40)/2;
+//		uint8_t xOffset = (128-72)/2;
+//		uint8_t yOffset = (64-40)/2;
 		//*********************************************
 
 		LL_mDelay(2);
@@ -369,7 +369,7 @@ void ssd1306_DrawChar(char ch, const uint8_t font[], uint8_t X, uint8_t Y, SSD13
 void ssd1306_DrawText(const char* str, const uint8_t font[], uint8_t X, uint8_t Y,  SSD1306_COLOR color)
 {
     uint8_t charWidth; /* Width of character */
-    uint8_t fOffset = font[0]; /* Offset of character */
+//    uint8_t fOffset = font[0]; /* Offset of character */
     uint8_t fWidth = font[1]; /* Width of font */
 
     while (*str) {
