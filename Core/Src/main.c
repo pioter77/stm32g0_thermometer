@@ -18,14 +18,18 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "dma.h"
 #include "i2c.h"
+#include "rtc.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ssd1306.h"
 #include "fonts.h"
+#include "ctrl_rtc.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,8 +99,12 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
+  MX_ADC1_Init();
+  MX_RTC_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   ssd1306_Init(I2C1);
+  rtc_init();
   //SSD1306_ON(I2C1);
   LL_mDelay(100);
 
@@ -109,13 +117,17 @@ int main(void)
   {
 	  //1st pixel for oled is at 28,24 position
 	  LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
+	  rtc_update();
+	  	char buff_time[13] = "hh:mm:ss";
+	  	char buff_date[13] = "dd:mm:yy";
+	  	sprintf((char *)buff_time, "%.2d:%.2d:%.2d", RTC_CTRL.hour_c, RTC_CTRL.minutes_c, RTC_CTRL.seconds_c);
+	  	sprintf((char *)buff_date, "%.2d.%.2d.%.2d", RTC_CTRL.day_c, RTC_CTRL.month_c, RTC_CTRL.year_c);
 
 //	  ssd1306_Fill(White);
 //	  ssd1306_SetCursor(28, 12+8);
 //	  SSD1306_DrawLine(56, 15, 60, 15, White);
 //	  SSD1306_DrawFilledRectangle(28, 24, 10, 10, White);
-	  const char buf1[] = "I:+24.5*C";
-	  const char buf2[] = "O:-12.9*C";
+
 	  const char buf3[] = "Temps";
 //	  SSD1306_DrawCircle(28+72/2, 14+20+10, 10, White);
 
@@ -130,7 +142,7 @@ int main(void)
 //	  SSD1306_DrawLine(30, 44, 30, 63, White);
 
 //	  ssd1306_DrawChar('D', Font6x8, 28, 40, White);
-#define LAYOUT_2
+#define LAYOUT_P1
 #ifdef LAYOUT_1
 	  //1st layout example:
 	  ssd1306_DrawText(buf1, Font7x13, 28, 24, White);
@@ -140,17 +152,69 @@ int main(void)
 	  SSD1306_DrawLine(30, 62, 96, 62, White);
 #endif
 
-#ifdef LAYOUT_2
+#ifdef LAYOUT_P0
+	  const char buf1[] = "I:+24.5*C";
+	  const char buf2[] = "O:-12.9*C";
 	  ssd1306_DrawText(buf3, Font6x8, 45, 24, White);
 	  SSD1306_DrawFilledRectangle(58, 35, 8, 3, White);
 	  SSD1306_DrawLine(30, 36, 96, 36, White);
 	  ssd1306_DrawText(buf1, Font7x13, 28, 41, White);
 	  ssd1306_DrawText(buf2, Font7x13, 28, 54, White);
 
+#endif
+
+#ifdef LAYOUT_P1	//time, setTime
+	  char buf_row3[] = "Time";
+	  char buf_row0[] = "Monday";
+	  ssd1306_DrawText(buf_row0, Font6x8, 28, 24, White);
+//	  SSD1306_DrawFilledRectangle(58, 35, 8, 3, White);
+//	  SSD1306_DrawLine(30, 36, 96, 36, White);
+	  ssd1306_DrawText(buff_time, Font7x13, 28, 32, White);
+	  ssd1306_DrawText(buff_date, Font7x13, 28, 43, White);
+	  //Bottom buttons
+	  char btnL_lbl[2] = "<";
+//	  char btnMid_lbl[5] = "MENU";
+	  char btnR_lbl[2] = ">";
+	  ssd1306_DrawText(btnL_lbl, Font6x8, 28, 56, White);
+	  ssd1306_DrawText(buf_row3, Font6x8, 50, 56, White);
+	  ssd1306_DrawText(btnR_lbl, Font6x8, 95, 56, White);
+#endif
+
+#ifdef LAYOUT_P2	//date, setDate
+	  ssd1306_DrawText(buf3, Font6x8, 45, 24, White);
+	  SSD1306_DrawFilledRectangle(58, 35, 8, 3, White);
+	  SSD1306_DrawLine(30, 36, 96, 36, White);
+//	  ssd1306_DrawText(buff_time, Font6x8, 28, 41, White);
+	  ssd1306_DrawText(buff_date, Font6x8, 28, 41, White);
+	  //Bottom buttons
+	  char btnL_lbl[2] = "<";
+	  char btnMid_lbl[4] = "SET";
+	  char btnR_lbl[2] = ">";
+	  ssd1306_DrawText(btnL_lbl, Font6x8, 28, 54, White);
+	  ssd1306_DrawText(btnMid_lbl, Font6x8, 54, 54, White);
+	  ssd1306_DrawText(btnR_lbl, Font6x8, 95, 54, White);
+
+#endif
+
+#ifdef LAYOUT_P3	//intermal temp sensor + vbat voltage
+	  char buff_adc[12] = "-19C 2.83V";
+	  ssd1306_DrawText(buf3, Font6x8, 45, 24, White);
+//	  SSD1306_DrawFilledRectangle(58, 35, 8, 3, White);
+//	  SSD1306_DrawLine(30, 36, 96, 36, White);
+//	  ssd1306_DrawText(buff_time, Font6x8, 28, 41, White);
+	  ssd1306_DrawText(buff_adc, Font6x8, 28, 34, White);
+	  ssd1306_DrawText(buff_adc, Font6x8, 28, 43, White);
+	  //Bottom buttons
+	  char btnL_lbl[2] = "<";
+	  char btnMid_lbl[5] = "MENU";
+	  char btnR_lbl[2] = ">";
+	  ssd1306_DrawText(btnL_lbl, Font6x8, 28, 56, White);
+	  ssd1306_DrawText(btnMid_lbl, Font6x8, 50, 56, White);
+	  ssd1306_DrawText(btnR_lbl, Font6x8, 95, 56, White);
 
 #endif
 	  ssd1306_UpdateScreen(I2C1);
-	  LL_mDelay(2000);
+	  LL_mDelay(500);
 
     /* USER CODE END WHILE */
 
@@ -171,6 +235,13 @@ void SystemClock_Config(void)
   {
   }
 
+  /* LSI configuration and activation */
+  LL_RCC_LSI_Enable();
+  while(LL_RCC_LSI_IsReady() != 1)
+  {
+  }
+
+  LL_PWR_EnableBkUpAccess();
   /* Main PLL configuration and activation */
   LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI, LL_RCC_PLLM_DIV_1, 8, LL_RCC_PLLR_DIV_2);
   LL_RCC_PLL_Enable();
