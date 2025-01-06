@@ -27,9 +27,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ssd1306.h"
-#include "fonts.h"
-#include "ctrl_rtc.h"
-#include "ctrl_menu.h"
+
+#include "ctrl_device.h"
 
 /* USER CODE END Includes */
 
@@ -106,6 +105,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   ssd1306_Init(I2C1);
   rtc_init();
+  ctrl_measure_init();
   //SSD1306_ON(I2C1);
   LL_mDelay(100);
   LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
@@ -118,10 +118,7 @@ int main(void)
   while (1)
   {
 	  //1st pixel for oled is at 28,24 position
-	  rtc_update();
-	  ctrl_buttons(&CTRLbuttons);
-	  ctrl_menu(&CTRLmenu);
-	  ssd1306_UpdateScreen(I2C1);
+	  ctrl_device(&CTRLdevice);
 //	  LL_mDelay(500);
 
     /* USER CODE END WHILE */
@@ -137,6 +134,11 @@ int main(void)
   */
 void SystemClock_Config(void)
 {
+  LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
+  while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_2)
+  {
+  }
+
   /* HSI configuration and activation */
   LL_RCC_HSI_Enable();
   while(LL_RCC_HSI_IsReady() != 1)
@@ -159,7 +161,7 @@ void SystemClock_Config(void)
   }
 
   /* Set AHB prescaler*/
-  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_4);
+  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
 
   /* Sysclk activation on the main PLL */
   LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
@@ -170,10 +172,10 @@ void SystemClock_Config(void)
   /* Set APB1 prescaler*/
   LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
 
-  LL_Init1msTick(16000000);
+  LL_Init1msTick(64000000);
 
   /* Update CMSIS variable (which can be updated also through SystemCoreClockUpdate function) */
-  LL_SetSystemCoreClock(16000000);
+  LL_SetSystemCoreClock(64000000);
 }
 
 /* USER CODE BEGIN 4 */

@@ -23,6 +23,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "i2c_helper.h"
+#include "ctrl_measure.h"
+#include "ctrl_timing.h"
 
 /* USER CODE END Includes */
 
@@ -236,7 +238,7 @@ void DMA1_Channel1_IRQHandler(void)
 void DMA1_Channel2_3_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
-
+	adc_dma_isr_handler();
   /* USER CODE END DMA1_Channel2_3_IRQn 0 */
   /* USER CODE BEGIN DMA1_Channel2_3_IRQn 1 */
 
