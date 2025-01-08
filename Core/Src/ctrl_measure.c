@@ -21,7 +21,7 @@ ADC_t ADC_MEAS={
 
 
 #if ADC_NO_CONV > 0
-	 volatile uint16_t adc_median_buff1[ADC_FILTER_LEN];
+	 //volatile uint16_t adc_median_buff1[ADC_FILTER_LEN];
 #endif
 #if ADC_NO_CONV > 1
 	 volatile uint16_t adc_median_buff2[ADC_FILTER_LEN];
@@ -89,28 +89,10 @@ void ctrl_measure_init(void)
 void ctrl_measure(void)
 {
 
-//	uint16_t sensor_in3= 			adc_median_filter(ADC_MEAS.adc_buff[0], (uint16_t *)adc_median_buff1);
-//	uint16_t sensor_light= 			adc_median_filter(ADC_MEAS.adc_buff[1], (uint16_t *)adc_median_buff2);
-	if(LL_ADC_IsActiveFlag_OVR(ADC1))
-	{
-//		  LL_ADC_Disable(ADC_MEAS.adc);
-//		  LL_DMA_DisableChannel(ADC_MEAS.dma, ADC_MEAS.dma_channel);
-		  LL_ADC_ClearFlag_OVR(ADC_MEAS.adc);
-//		  LL_DMA_EnableChannel(ADC_MEAS.dma, ADC_MEAS.dma_channel);
-//		  LL_ADC_Enable(ADC_MEAS.adc);
-			//start adc meas
-		  LL_ADC_REG_StartConversion(ADC_MEAS.adc);
-	}
-
-	CTRLdevice.temp_int_raw = adc_median_filter(ADC_MEAS.adc_buff[0], (uint16_t *)adc_median_buff1);
+//	CTRLdevice.temp_int_raw = adc_median_filter(ADC_MEAS.adc_buff[0], (uint16_t *)adc_median_buff1);
 	 volatile uint16_t tempVal_raw = adc_median_filter(ADC_MEAS.adc_buff[1], (uint16_t *)adc_median_buff2);
 //	 CTRLdevice.vBat_raw = calculate_temp_internal((uint16_t)tempVal_raw);
 	 CTRLdevice.vBat_raw = calculate_vref_internal((uint16_t)tempVal_raw);
-//	PLANT1.moisture_level= (uint16_t)((PLANT1.moisture_level_raw/4095.0)*100.0);
-//	PLANT2.moisture_level= (uint16_t)((PLANT2.moisture_level_raw/4095.0)*100.0);
-
-//	ADC_MEAS.adc_buff[2];
-//	ADC_MEAS.adc_buff[3];
 }
 
 uint16_t adc_median_filter(uint16_t input_val, uint16_t *buff)
