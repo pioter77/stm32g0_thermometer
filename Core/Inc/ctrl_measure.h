@@ -64,5 +64,7 @@ void adc_dma_isr_handler(void);
 void ctrl_measure_init(void);
 uint16_t adc_median_filter(uint16_t input_val, uint16_t *buff);		//return filtered value
 int compare_fcn(const void *a, const void *b);
+int32_t calculate_temp_internal(uint16_t adc_raw);
+uint16_t calculate_vref_internal(uint16_t adc_raw);
 
 #endif /* INC_CTRL_MEASURE_H_ */

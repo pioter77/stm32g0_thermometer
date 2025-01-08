@@ -56,25 +56,17 @@ void adc_init(void)
 	  LL_DMA_EnableIT_TC(ADC_MEAS.dma, ADC_MEAS.dma_channel);
 	  LL_DMA_EnableIT_TE(ADC_MEAS.dma, ADC_MEAS.dma_channel);
 	  LL_DMA_EnableChannel(ADC_MEAS.dma, ADC_MEAS.dma_channel);
-//	  LL_ADC_PATH_INTERNAL_VBAT
-//	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
-
+//	  LL_ADC_REG_SetSequencerChAdd(ADC1, LL_ADC_CHANNEL_VBAT);
+//	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT);
+	  //cubemx misses this part when generating:
 //	  LL_ADC_REG_SetSequencerChAdd(ADC1, LL_ADC_CHANNEL_TEMPSENSOR);
-
-
-	  LL_ADC_REG_SetSequencerChAdd(ADC1, LL_ADC_CHANNEL_VBAT);
-	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT);
-
-
-//	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT | LL_ADC_PATH_INTERNAL_TEMPSENSOR);
-	  //init adc
-//	  LL_ADC_EnableIT_EOS(ADC_MEAS.adc);
-//	  LL_ADC_EnableIT_OVR(ADC_MEAS.adc);
+//	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
+	  LL_ADC_REG_SetSequencerChAdd(ADC1, LL_ADC_CHANNEL_VREFINT);
+	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VREFINT);
 	  LL_ADC_Enable(ADC_MEAS.adc);
-
 		//start adc meas
 	  LL_ADC_REG_StartConversion(ADC_MEAS.adc);
-//	  LL_ADC_REG_StartConversionSWStart(ADC_MEAS.adc);
+
 }
 
 void adc_dma_isr_handler(void)
@@ -111,8 +103,9 @@ void ctrl_measure(void)
 	}
 
 	CTRLdevice.temp_int_raw = adc_median_filter(ADC_MEAS.adc_buff[0], (uint16_t *)adc_median_buff1);
-	CTRLdevice.vBat_raw = adc_median_filter(ADC_MEAS.adc_buff[1], (uint16_t *)adc_median_buff2);
-
+	 volatile uint16_t tempVal_raw = adc_median_filter(ADC_MEAS.adc_buff[1], (uint16_t *)adc_median_buff2);
+//	 CTRLdevice.vBat_raw = calculate_temp_internal((uint16_t)tempVal_raw);
+	 CTRLdevice.vBat_raw = calculate_vref_internal((uint16_t)tempVal_raw);
 //	PLANT1.moisture_level= (uint16_t)((PLANT1.moisture_level_raw/4095.0)*100.0);
 //	PLANT2.moisture_level= (uint16_t)((PLANT2.moisture_level_raw/4095.0)*100.0);
 
@@ -147,6 +140,15 @@ int compare_fcn(const void *a, const void *b)
 	if(a_bak < b_bak) return -1;
 	else if(a_bak > b_bak) return 1;
 	else return 0;
-
-
 }
+
+int32_t calculate_temp_internal(uint16_t adc_raw)
+{
+	return __LL_ADC_CALC_TEMPERATURE((uint32_t)3300, adc_raw, LL_ADC_RESOLUTION_12B);
+}
+
+uint16_t calculate_vref_internal(uint16_t adc_raw)
+{
+	return __LL_ADC_CALC_VREFANALOG_VOLTAGE(adc_raw, LL_ADC_RESOLUTION_12B);
+}
+

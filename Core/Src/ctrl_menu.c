@@ -67,7 +67,7 @@ static void draw_panel_adc(void)
 //	  SSD1306_DrawLine(30, 36, 96, 36, White);
 //	  ssd1306_DrawText(buff_time, Font6x8, 28, 41, White);
 	  sprintf((char *)buff_adc1, "%.2d in 6", CTRLdevice.temp_int_raw);
-	  sprintf((char *)buff_adc2, "%.2d vbat", CTRLdevice.vBat_raw);
+	  sprintf((char *)buff_adc2, "%.2d mV", CTRLdevice.vBat_raw);
 
 	  ssd1306_DrawText(buff_adc1, Font6x8, 28, 34, White);
 	  ssd1306_DrawText(buff_adc2, Font6x8, 28, 43, White);
