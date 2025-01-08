@@ -10,9 +10,10 @@
 #include "ctrl_rtc.h"
 #include "fonts.h"
 #include "stdio.h"
+#include "ctrl_device.h"
 
 CTRL_Menu_t CTRLmenu={
-	.menuPos = 1,
+	.menuPos = 2,
 	.menuMax = 3,
 	.drawMainPanels = 1
 };
@@ -58,14 +59,18 @@ static void draw_panel_dateTime(void)
 
 static void draw_panel_adc(void)
 {
-	  char buff_adc[12] = "-19C 2.83V";
+	  char buff_adc1[12] = "-19C 2.83V";
+	  char buff_adc2[12] = "-19C 2.83V";
 	  const char buf_row0[] = "ADC:";
 	  ssd1306_DrawText(buf_row0, Font6x8, 45, 24, White);
 //	  SSD1306_DrawFilledRectangle(58, 35, 8, 3, White);
 //	  SSD1306_DrawLine(30, 36, 96, 36, White);
 //	  ssd1306_DrawText(buff_time, Font6x8, 28, 41, White);
-	  ssd1306_DrawText(buff_adc, Font6x8, 28, 34, White);
-	  ssd1306_DrawText(buff_adc, Font6x8, 28, 43, White);
+	  sprintf((char *)buff_adc1, "%.2d in 6", CTRLdevice.temp_int_raw);
+	  sprintf((char *)buff_adc2, "%.2d vbat", CTRLdevice.vBat_raw);
+
+	  ssd1306_DrawText(buff_adc1, Font6x8, 28, 34, White);
+	  ssd1306_DrawText(buff_adc2, Font6x8, 28, 43, White);
 	  //Bottom buttons
 	  const char btnL_lbl[2] = "<";
 	  const char btnMid_lbl[5] = "ADCs";

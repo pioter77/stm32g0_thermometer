@@ -56,10 +56,20 @@ void adc_init(void)
 	  LL_DMA_EnableIT_TC(ADC_MEAS.dma, ADC_MEAS.dma_channel);
 	  LL_DMA_EnableIT_TE(ADC_MEAS.dma, ADC_MEAS.dma_channel);
 	  LL_DMA_EnableChannel(ADC_MEAS.dma, ADC_MEAS.dma_channel);
+//	  LL_ADC_PATH_INTERNAL_VBAT
+//	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
 
+//	  LL_ADC_REG_SetSequencerChAdd(ADC1, LL_ADC_CHANNEL_TEMPSENSOR);
+
+
+	  LL_ADC_REG_SetSequencerChAdd(ADC1, LL_ADC_CHANNEL_VBAT);
+	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT);
+
+
+//	  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT | LL_ADC_PATH_INTERNAL_TEMPSENSOR);
 	  //init adc
-	  LL_ADC_EnableIT_EOS(ADC_MEAS.adc);
-	  LL_ADC_EnableIT_OVR(ADC_MEAS.adc);
+//	  LL_ADC_EnableIT_EOS(ADC_MEAS.adc);
+//	  LL_ADC_EnableIT_OVR(ADC_MEAS.adc);
 	  LL_ADC_Enable(ADC_MEAS.adc);
 
 		//start adc meas
@@ -89,10 +99,19 @@ void ctrl_measure(void)
 
 //	uint16_t sensor_in3= 			adc_median_filter(ADC_MEAS.adc_buff[0], (uint16_t *)adc_median_buff1);
 //	uint16_t sensor_light= 			adc_median_filter(ADC_MEAS.adc_buff[1], (uint16_t *)adc_median_buff2);
+	if(LL_ADC_IsActiveFlag_OVR(ADC1))
+	{
+//		  LL_ADC_Disable(ADC_MEAS.adc);
+//		  LL_DMA_DisableChannel(ADC_MEAS.dma, ADC_MEAS.dma_channel);
+		  LL_ADC_ClearFlag_OVR(ADC_MEAS.adc);
+//		  LL_DMA_EnableChannel(ADC_MEAS.dma, ADC_MEAS.dma_channel);
+//		  LL_ADC_Enable(ADC_MEAS.adc);
+			//start adc meas
+		  LL_ADC_REG_StartConversion(ADC_MEAS.adc);
+	}
 
-
-	CTRLdevice.temp_int_raw = adc_median_filter(ADC_MEAS.adc_buff[1], (uint16_t *)adc_median_buff1);
-	CTRLdevice.vBat_raw = adc_median_filter(ADC_MEAS.adc_buff[2], (uint16_t *)adc_median_buff2);
+	CTRLdevice.temp_int_raw = adc_median_filter(ADC_MEAS.adc_buff[0], (uint16_t *)adc_median_buff1);
+	CTRLdevice.vBat_raw = adc_median_filter(ADC_MEAS.adc_buff[1], (uint16_t *)adc_median_buff2);
 
 //	PLANT1.moisture_level= (uint16_t)((PLANT1.moisture_level_raw/4095.0)*100.0);
 //	PLANT2.moisture_level= (uint16_t)((PLANT2.moisture_level_raw/4095.0)*100.0);

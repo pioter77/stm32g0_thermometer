@@ -236,47 +236,6 @@ void ssd1306_UpdateScreen(I2C_TypeDef *I2Cx)
 	I2C_MultWriteData(I2Cx, SSD1306_I2C_ADDR, 0x00, comm2, sizeof(comm2));
 
 	for (i = 0; i < 8; i++) {
-//		ssd1306_WriteCommand(I2Cx, 0x22);
-//		ssd1306_WriteCommand(I2Cx, 0xB0 + i);
-
-//		ssd1306_WriteCommand(I2Cx, 0x04);
-//		ssd1306_WriteCommand(I2Cx, 0x0C);
-//		ssd1306_WriteCommand(I2Cx, 0x11);
-//		uint8_t xOffset = (128-72)/2;
-//		uint8_t yOffset = (64-40)/2;
-		//*********************************************
-
-		LL_mDelay(2);
-		//now 1024B
-
-
-		//*********************************************
-	//	ssd1306_SetCursor(xOffset, yOffset);
-	//	SSD1306_DrawFilledRectangle(xOffset, yOffset, 72, 40, White);
-//
-//		uint8_t dupa1[] = {0xFF};
-//		for(uint8_t segment = 0; segment<72; segment++){
-//			I2C_MultWriteData(I2Cx, SSD1306_I2C_ADDR, 0x40, dupa1, 1);
-//		}
-		//ssd1306_WriteCommand(I2Cx,0xA5); //Display ON
-		//0.42 display has an offset of 28 pixels sowe move it by 28px and alling the image
-//		ssd1306_WriteCommand(I2Cx, 0x00 + ( 28 & 0x0f ) );	//set low column
-//		ssd1306_WriteCommand(I2Cx, 0x10 + ( 28 >> 4 ) );		//set high column
-//		ssd1306_WriteCommand(I2Cx, 0x0C);
-//		ssd1306_WriteCommand(I2Cx, 0x11);
-
-
-
-//		uint16_t address = (0x11 << 4) | 0x0C; //Combine the lower and higher bits into one address
-//		 uint8_t newLower = address & 0x0F; //Disassemble the new address and create the new higher and lower bits
-//		 uint8_t newHigher = (address >> 4) & 0x0F;
-//
-//		 ssd1306_WriteCommand(I2Cx, newLower);
-//		 ssd1306_WriteCommand(I2Cx, newHigher);
-
-//		ssd1306_WriteCommand(I2Cx, 0x0C);
-//		ssd1306_WriteCommand(I2Cx, 0x11);
-//		SSD1306_DrawFilledRectangle(xOffset, yOffset, 72, 40, White);
 
 		I2C_MultWriteData(I2Cx, SSD1306_I2C_ADDR, 0x40, &SSD1306_Buffer[SSD1306_WIDTH * i], SSD1306_WIDTH);
 //		I2C_MultWriteData(I2Cx, SSD1306_I2C_ADDR, 0x40, &SSD1306_Buffer[128 * i], 128);

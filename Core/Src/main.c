@@ -27,7 +27,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ssd1306.h"
-
+#include "ctrl_rtc.h"
+#include "ctrl_measure.h"
 #include "ctrl_device.h"
 
 /* USER CODE END Includes */

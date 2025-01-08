@@ -11,6 +11,7 @@
 #include "ctrl_menu.h"
 #include "ctrl_buttons.h"
 #include "ctrl_measure.h"
+#include "ssd1306.h"
 
 CTRL_Device_t CTRLdevice = {
 		.temp_int_raw = 0,
