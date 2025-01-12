@@ -8,6 +8,7 @@
 
 #include "ctrl_power.h"
 #include "stm32g0xx_ll_pwr.h"
+#include "ssd1306.h"
 
 
 
@@ -69,6 +70,7 @@ void ctrl_power(CTRL_Power_t *ctrl)
 					LL_RCC_LSE_Enable();
 					LL_PWR_ClearFlag_WU();						//clear all wakeup flags all 4 of them
 					ctrl_power_setWakeUpPins(ctrl);
+					SSD1306_OFF(I2C1);
 					LL_mDelay(2000);							//give some time to gpio reconfiguration and prevent from sticking wakup pin
 					LL_PWR_SetPowerMode(LL_PWR_MODE_STANDBY);	//LPMS = 011 //select standby mode
 					LL_LPM_EnableDeepSleep();					//SLEEPDEEP bit set in cortex m0 system control reg
