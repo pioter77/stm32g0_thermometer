@@ -12,6 +12,7 @@
 #include "ctrl_buttons.h"
 #include "ctrl_measure.h"
 #include "ssd1306.h"
+#include "ctrl_power.h"
 
 CTRL_Device_t CTRLdevice = {
 		.temp_int_raw = 0,
@@ -21,6 +22,7 @@ CTRL_Device_t CTRLdevice = {
 
 void ctrl_device(CTRL_Device_t *ctrl)
 {
+	  ctrl_power(&CTRLpower);
 	  rtc_update();
 	  ctrl_measure();
 	  ctrl_buttons(&CTRLbuttons);

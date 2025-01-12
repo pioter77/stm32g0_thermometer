@@ -16,6 +16,10 @@ typedef struct CTRL_Menu_T{
 	uint8_t menuMax;
 
 	_Bool drawMainPanels;
+
+	volatile _Bool btnLpressed;
+	volatile _Bool btnMpressed;
+	volatile _Bool btnRpressed;
 }CTRL_Menu_t;
 
 extern CTRL_Menu_t CTRLmenu;

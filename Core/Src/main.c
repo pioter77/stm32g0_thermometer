@@ -30,6 +30,7 @@
 #include "ctrl_rtc.h"
 #include "ctrl_measure.h"
 #include "ctrl_device.h"
+#include "ctrl_power.h"
 
 /* USER CODE END Includes */
 
@@ -110,6 +111,7 @@ int main(void)
   //SSD1306_ON(I2C1);
   LL_mDelay(100);
   LL_GPIO_TogglePin(LED_OUT_GPIO_Port, LED_OUT_Pin);
+  ctrl_power_init(&CTRLpower);
 
   //SSD1306_Clear (I2C1);
   /* USER CODE END 2 */

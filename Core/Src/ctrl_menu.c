@@ -13,9 +13,13 @@
 #include "ctrl_device.h"
 
 CTRL_Menu_t CTRLmenu={
-	.menuPos = 2,
+	.menuPos = 0,
 	.menuMax = 3,
-	.drawMainPanels = 1
+	.drawMainPanels = 1,
+
+	.btnLpressed = 0,
+	.btnMpressed = 0,
+	.btnRpressed = 0,
 };
 
 static void draw_panel_climate(void)
@@ -80,9 +84,36 @@ static void draw_panel_adc(void)
 	  ssd1306_DrawText(btnR_lbl, Font6x8, 95, 56, White);
 }
 
+static void buttonNavHandling(CTRL_Menu_t *ctrl)
+{
+	if(ctrl->btnLpressed)
+	{
+		SSD1306_Clear(I2C1);
+		ctrl->btnLpressed = 0;
+		if(ctrl->menuPos) ctrl->menuPos--;
+		else ctrl->menuPos = ctrl->menuMax;
+	}
+
+	if(ctrl->btnMpressed)
+	{
+		SSD1306_Clear(I2C1);
+		ctrl->btnMpressed = 0;
+	}
+
+	if(ctrl->btnRpressed)
+	{
+		SSD1306_Clear(I2C1);
+		ctrl->btnRpressed = 0;
+		if(ctrl->menuPos < ctrl->menuMax) ctrl->menuPos++;
+		else ctrl->menuPos = 0;
+	}
+}
 
 void ctrl_menu(CTRL_Menu_t *ctrl)
 {
+
+	buttonNavHandling(ctrl);
+
 	switch (ctrl->menuPos)
 	{
 	case 1:
@@ -96,5 +127,7 @@ void ctrl_menu(CTRL_Menu_t *ctrl)
 		break;
 	}
 }
+
+
 
 

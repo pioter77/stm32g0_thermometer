@@ -25,6 +25,8 @@
 #include "i2c_helper.h"
 #include "ctrl_measure.h"
 #include "ctrl_timing.h"
+#include "ctrl_power.h"
+#include "ctrl_menu.h"
 
 /* USER CODE END Includes */
 
@@ -156,7 +158,7 @@ void EXTI0_1_IRQHandler(void)
   {
     LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_0);
     /* USER CODE BEGIN LL_EXTI_LINE_0_FALLING */
-
+    CTRLmenu.btnLpressed = 1;
     /* USER CODE END LL_EXTI_LINE_0_FALLING */
   }
   /* USER CODE BEGIN EXTI0_1_IRQn 1 */
@@ -176,7 +178,8 @@ void EXTI2_3_IRQHandler(void)
   {
     LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_2);
     /* USER CODE BEGIN LL_EXTI_LINE_2_FALLING */
-
+    CTRLmenu.btnMpressed = 1;
+    CTRLpower.enterNextPowerMode = 1;
     /* USER CODE END LL_EXTI_LINE_2_FALLING */
   }
   /* USER CODE BEGIN EXTI2_3_IRQn 1 */
@@ -196,7 +199,7 @@ void EXTI4_15_IRQHandler(void)
   {
     LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_4);
     /* USER CODE BEGIN LL_EXTI_LINE_4_FALLING */
-
+    CTRLmenu.btnRpressed = 1;
     /* USER CODE END LL_EXTI_LINE_4_FALLING */
   }
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */
